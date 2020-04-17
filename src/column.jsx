@@ -5,7 +5,7 @@ import Task from "./task";
 
 const Container = styled.div`
   margin: 8px;
-  background-color: white;
+  background-color: pink;
   border: 1px solid lightgrey;
   border-radius: 2px;
   width: 30%;
@@ -18,11 +18,13 @@ const Title = styled.h3`
 const TaskList = styled.div`
   padding: 8px;
   transition: background-color 0.2s ease;
-  background-color: ${props => (props.isDraggingOver ? "skyblue" : "inherit")};
+  background-color: ${props => (props.isDraggingOver ? "#1b03a3" : "purple")};
   flex-grow: 1;
   min-height: 190px;
 `;
 
+// The InnerList is a PureComponent to prevent unnecessary
+// render function calls when rendering a task.
 class InnerList extends React.PureComponent {
   render() {
     return this.props.tasks.map((task, index) => (

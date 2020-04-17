@@ -9,6 +9,8 @@ const Container = styled.div`
   display: flex;
 `;
 
+// The InnerList is a PureComponent to prevent unnecessary
+// render function calls when rendering a column.
 class InnerList extends React.PureComponent {
   render() {
     const { column, taskMap, index } = this.props;
@@ -48,6 +50,7 @@ class App extends React.Component {
       return;
     }
 
+    // Logic for Column DnD (this is different from task DnD)
     if (type === "column") {
       const newColumnOrder = Array.from(this.state.columnOrder);
       newColumnOrder.splice(source.index, 1);
@@ -62,9 +65,11 @@ class App extends React.Component {
       return;
     }
 
+    // Begin logic for Task DnD with ability to move between columns
     const start = this.state.columns[source.droppableId];
     const finish = this.state.columns[destination.droppableId];
 
+    // If task was not moved to a new column
     if (start === finish) {
       const newTaskIds = Array.from(start.taskIds);
       newTaskIds.splice(source.index, 1);
@@ -87,6 +92,7 @@ class App extends React.Component {
       return;
     }
 
+    // If task was moved to a new column
     const startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
     const newStart = {
@@ -116,11 +122,13 @@ class App extends React.Component {
   render() {
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
+        {/* This droppable is for columns DnD and is set to horizontal */}
         <Droppable
           droppableId="all-columns"
           direction="horizontal"
           type="column" // only columns can be dropped
         >
+          {/* Child must be a function. */}
           {provided => (
             <Container {...provided.droppableProps} ref={provided.innerRef}>
               {this.state.columnOrder.map((columnId, index) => {
